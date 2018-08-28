@@ -245,6 +245,8 @@ namespace FuncionalidadesAdicionales
 
         }
 
+       
+
         public static void Agregar_UDF(string Name, string Description, SAPbobsCOM.BoFieldTypes Type, int Size, int FieldSize, string TableName)
         {
             try

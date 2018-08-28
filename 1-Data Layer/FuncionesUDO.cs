@@ -245,6 +245,103 @@ namespace FuncionalidadesAdicionales._1_Data_Layer
             }
             catch (Exception){}
             return rpta;
-        } 
+        }
+
+        public void CreateUDO(string tableName, SAPbobsCOM.BoUDOObjType objtype)
+        {
+            SAPbobsCOM.UserObjectsMD oUdtMD = null/* TODO Change to default(_) if this is not a reference type */; // ‘
+            string errmsg = "";
+            try
+            {
+                SAPbobsCOM.Company SBO_Company = Conexion.oCompany;
+
+                oUdtMD = (SAPbobsCOM.UserObjectsMD)SBO_Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserObjectsMD);
+                if (oUdtMD.GetByKey(tableName) == false)
+                {
+                    oUdtMD.Code = tableName;
+                    oUdtMD.Name = tableName;
+                    oUdtMD.TableName = tableName;
+
+                    oUdtMD.ObjectType = objtype;
+
+                    oUdtMD.CanCancel = SAPbobsCOM.BoYesNoEnum.tNO;
+                    oUdtMD.CanClose = SAPbobsCOM.BoYesNoEnum.tNO;
+                    oUdtMD.CanDelete = SAPbobsCOM.BoYesNoEnum.tNO;
+                    oUdtMD.CanFind = SAPbobsCOM.BoYesNoEnum.tYES;
+                    oUdtMD.CanLog = SAPbobsCOM.BoYesNoEnum.tYES;
+                    oUdtMD.ManageSeries = SAPbobsCOM.BoYesNoEnum.tNO;
+                    oUdtMD.CanCreateDefaultForm = SAPbobsCOM.BoYesNoEnum.tNO;
+                    oUdtMD.CanYearTransfer = SAPbobsCOM.BoYesNoEnum.tYES;
+                    oUdtMD.EnableEnhancedForm = SAPbobsCOM.BoYesNoEnum.tYES;
+                    oUdtMD.MenuItem = SAPbobsCOM.BoYesNoEnum.tNO;
+                    oUdtMD.UseUniqueFormType = SAPbobsCOM.BoYesNoEnum.tNO;
+                    oUdtMD.Position = 1;
+                    oUdtMD.FatherMenuID = 2048;
+                    oUdtMD.LogTableName = "AREBATEMASTER";
+                    if (objtype == SAPbobsCOM.BoUDOObjType.boud_MasterData)
+                    {
+                        oUdtMD.FormColumns.FormColumnAlias = "Code";
+                        oUdtMD.FormColumns.Add();
+                    }
+                    else
+                    {
+                        oUdtMD.FormColumns.FormColumnAlias = "DocEntry";
+                        oUdtMD.FormColumns.Add();
+                    }
+
+                    int lRetCode;
+                    lRetCode = oUdtMD.Add();
+
+                    if ((lRetCode != 0))
+                    {
+                        if ((lRetCode == -2035))
+                            errmsg = "-2035";
+                        errmsg = SBO_Company.GetLastErrorDescription();
+                    }
+
+                    System.Runtime.InteropServices.Marshal.ReleaseComObject(oUdtMD);
+                    oUdtMD = null/* TODO Change to default(_) if this is not a reference type */;
+                    GC.Collect();
+                    errmsg = "";
+                }
+                else
+                    errmsg = "";
+
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        public bool CheckUDOExists(string UDOName)
+        {
+            SAPbobsCOM.Company SBO_Company = Conexion.oCompany;
+
+            SAPbobsCOM.UserObjectsMD oUdtMD = null/* TODO Change to default(_) if this is not a reference type */;
+            bool ret = false;
+            try
+            {
+                oUdtMD = (SAPbobsCOM.UserObjectsMD)SBO_Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserObjectsMD);
+
+                if (oUdtMD.GetByKey(UDOName))
+                    ret = true;
+                else
+                    ret = false;
+            }
+            catch (Exception)
+            {
+                ret = false;
+            }
+            finally
+            {
+                System.Runtime.InteropServices.Marshal.ReleaseComObject(oUdtMD);
+                oUdtMD = null/* TODO Change to default(_) if this is not a reference type */;
+                GC.Collect();
+            }
+
+            return ret;
+        }
+
+
     }
 }

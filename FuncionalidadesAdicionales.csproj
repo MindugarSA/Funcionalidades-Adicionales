@@ -123,6 +123,9 @@
       <DependentUpon>frmBuscaEmp.b1f</DependentUpon>
     </Compile>
     <Compile Include="2-Business layer\Funciones.cs" />
+    <Compile Include="3-Presentation Layer\Users Forms\FrmEmpleados.b1f.cs">
+      <DependentUpon>FrmEmpleados.b1f</DependentUpon>
+    </Compile>
     <Compile Include="3-Presentation Layer\Users Forms\frmParametrosAdic.b1f.cs">
       <DependentUpon>frmParametrosAdic.b1f</DependentUpon>
     </Compile>
@@ -184,6 +187,9 @@
     </None>
     <None Include="3-Presentation Layer\System Forms\MediosdePago.b1f">
       <FormCategory>SystemForm</FormCategory>
+    </None>
+    <None Include="3-Presentation Layer\Users Forms\FrmEmpleados.b1f">
+      <FormCategory>UserForm</FormCategory>
     </None>
     <None Include="3-Presentation Layer\Users Forms\frmParametrosAdic.b1f">
       <FormCategory>UserForm</FormCategory>

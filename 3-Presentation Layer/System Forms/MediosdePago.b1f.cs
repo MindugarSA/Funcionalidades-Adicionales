@@ -16,11 +16,7 @@ namespace FuncionalidadesAdicionales
         public SystemForm5()
         {
         }
-        ///-- MODIFICACIONES SOBRE EL FORM --
-        /// Para poder distingir cuando un pago emitido contiene una transferencia bancaria, se creo una tabla [@ZAUTORI]
-        /// donde al momento de  
-        /// 
-        /// 
+
         /// <summary>
         /// Initialize components. Called by framework after form created.
         /// </summary>

@@ -19,7 +19,13 @@ namespace FuncionalidadesAdicionales
         public PagoEfectuado()
         {
         }
-
+        ///-- MODIFICACIONES SOBRE EL FORM --
+        /// Para poder distingir cuando un pago emitido contiene una transferencia bancaria, se creo una tabla [@ZAUTORI]
+        /// la cual se maneja por la clase DTablaAutoriza y NTablaAutoriza donde al momento de guardar un pago, verifica 
+        /// si este tiene un pago por transferencia, asi registra en dicha tabla el registro correspondiente para que sea
+        /// leido por la Query para los Procesos de Autorizacion (Pago Efectuado con Transferencia)
+        /// 
+        /// 
         /// <summary>
         /// Initialize components. Called by framework after form created.
         /// </summary>

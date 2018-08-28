@@ -7,6 +7,7 @@ using SAPbouiCOM.Framework;
 using SAPbobsCOM;
 using FuncionalidadesAdicionales._2_Business_layer;
 using System.Xml;
+using FuncionalidadesAdicionales._3_Presentation_Layer.Users_Forms;
 
 namespace FuncionalidadesAdicionales
 {
@@ -102,12 +103,16 @@ namespace FuncionalidadesAdicionales
 
         private void Button1_ClickAfter(object sboObject, SAPbouiCOM.SBOItemEventArg pVal)
         {
-            UserFormBase activeForm =  new frmBuscaEmp();
+            try
+            {
+                FrmEmpleados activeForm = new FrmEmpleados();
 
-            SAPbouiCOM.UserDataSource oUDS = activeForm.UIAPIRawForm.DataSources.UserDataSources.Item("UD_0");
-            oUDS.ValueEx = oForm.UniqueID;
+                SAPbouiCOM.UserDataSource oUDS = activeForm.UIAPIRawForm.DataSources.UserDataSources.Item("UD_0");
+                oUDS.ValueEx = oForm.UniqueID;
 
-            activeForm.Show();
+                activeForm.Show();
+            }
+            catch { }
 
         }
 

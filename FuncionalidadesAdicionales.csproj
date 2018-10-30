@@ -106,6 +106,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="0 - DTO\Anexos.cs" />
     <Compile Include="1-Data Layer\Conexion.cs" />
     <Compile Include="1-Data Layer\DConsultas.cs" />
     <Compile Include="1-Data Layer\DParametros.cs" />
@@ -116,8 +117,12 @@
     <Compile Include="2-Business layer\NConsultas.cs" />
     <Compile Include="2-Business layer\NModal.cs" />
     <Compile Include="2-Business layer\NTablaAutoriza.cs" />
+    <Compile Include="2-Business layer\NVerificaAgregaUDO.cs" />
     <Compile Include="3-Presentation Layer\System Forms\PagoEfectuado.b1f.cs">
       <DependentUpon>PagoEfectuado.b1f</DependentUpon>
+    </Compile>
+    <Compile Include="3-Presentation Layer\System Forms\FacturaProveedores.b1f.cs">
+      <DependentUpon>FacturaProveedores.b1f</DependentUpon>
     </Compile>
     <Compile Include="3-Presentation Layer\Users Forms\frmBuscaEmp.b1f.cs">
       <DependentUpon>frmBuscaEmp.b1f</DependentUpon>
@@ -169,6 +174,12 @@
     </None>
     <None Include="3-Presentation Layer\System Forms\SolicitudCompra.b1f__orig_srf">
       <DependentUpon>SolicitudCompra.b1f</DependentUpon>
+    </None>
+    <None Include="3-Presentation Layer\System Forms\FacturaProveedores.b1f">
+      <FormCategory>SystemForm</FormCategory>
+    </None>
+    <None Include="3-Presentation Layer\System Forms\FacturaProveedores.b1f__orig_srf">
+      <DependentUpon>FacturaProveedores.b1f</DependentUpon>
     </None>
     <None Include="3-Presentation Layer\Users Forms\frmBuscaEmp.b1f">
       <FormCategory>UserForm</FormCategory>

@@ -6,6 +6,7 @@ using System.Globalization;
 
 using FuncionalidadesAdicionales._1_Data_Layer;
 using FuncionalidadesAdicionales._2_Business_layer;
+using FuncionalidadesAdicionales._3_Presentation_Layer.System_Forms;
 
 namespace FuncionalidadesAdicionales
 {
@@ -63,6 +64,7 @@ namespace FuncionalidadesAdicionales
                 Conexion.Conectar_Aplicacion();
                 oCompany = Conexion.oCompany;
                 Funciones.AgregarUDF_Salida_Inventario();
+                NVerificaAgregaUDO.VerificarCrearUDO();
                 oApp.Run();
             }
             catch (Exception ex)
@@ -268,6 +270,11 @@ namespace FuncionalidadesAdicionales
                 if ((BOInfo.FormTypeEx == "142"))
                 {
                     OrdenCompra.OrdenCompra_FormDataEvent(ref BOInfo, out BubbleEvent);
+                }
+
+                if ((BOInfo.FormTypeEx == "141"))
+                {
+                    FacturaProveedores.FacturaProveedores_FormDataEvent(ref BOInfo, out BubbleEvent);
                 }
 
                 int ObjN = Convert.ToInt32(BOInfo.Type);

@@ -5,6 +5,8 @@ using System.Text;
 using SAPbouiCOM.Framework;
 
 using FuncionalidadesAdicionales._2_Business_layer;
+using FuncionalidadesAdicionales._1_Data_Layer;
+using FuncionalidadesAdicionales._0___DTO;
 
 namespace FuncionalidadesAdicionales
 {
@@ -208,20 +210,66 @@ namespace FuncionalidadesAdicionales
                 //SAPbobsCOM.Documents oPurchaseOrders = (SAPbobsCOM.Documents)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oPurchaseOrders);
                 //oPurchaseOrders.GetByKey(Convert.ToInt32(sDocEntry));
 
-                string sql = "select  distinct BaseRef,BaseType,BaseEntry from POR1 where docentry = " + sDocEntry;
-                DT_SQL.ExecuteQuery(sql);
+                //source = oForm.DataSources.DBDataSources.Item("POR1");
+                //for (int i = 0; i <= source.Size - 1; i++)
+                //{
+                //    var BaseRef = source.GetValue("BaseRef", i);
+                //    var BaseTypex = source.GetValue("BaseType", i);
+                //    var BaseEntryx = source.GetValue("BaseEntry", i);
+                //}
 
-                if (!DT_SQL.IsEmpty)
+                string BaseType = "";
+                string TipoLinea = "";
+                string sql = "";
+                List<Anexos> lAnexos = new List<Anexos>();
+                //List<Object> DetallesVoid = new List<Object>();
+                oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("38").Specific;
+
+                // Recorre Matrix, cargar Objeto Anexo e insertar en lista
+                for (int i = 1; i <= oMatrix.RowCount ; i++)
                 {
-                    for (int i = 0; i < DT_SQL.Rows.Count; i++)
+                    try
+                    {
+                        BaseType = ((SAPbouiCOM.EditText)oMatrix.Columns.Item("43").Cells.Item(i).Specific).Value.Trim();
+                        TipoLinea = ((SAPbouiCOM.ComboBox)oMatrix.Columns.Item("257").Cells.Item(i).Specific).Selected.Value.Trim();
+                    }
+                    catch
+                    {
+                        TipoLinea = "No valido";
+                        BaseType = "-1";
+                    }
+
+                    if (TipoLinea.Trim().Length == 0 && BaseType != "-1")
+                    {
+
+                        Anexos oAnexo = new Anexos();
+                        oAnexo.FormID = oForm.UniqueID;
+                        oAnexo.ObjType = oForm.TypeEx;
+                        oAnexo.BaseRef = ((SAPbouiCOM.EditText)oMatrix.Columns.Item("44").Cells.Item(i).Specific).Value.Trim();
+                        oAnexo.BaseType = ((SAPbouiCOM.EditText)oMatrix.Columns.Item("43").Cells.Item(i).Specific).Value.Trim();
+                        oAnexo.BaseEntry = ((SAPbouiCOM.EditText)oMatrix.Columns.Item("45").Cells.Item(i).Specific).Value.Trim();
+                        lAnexos.Add(oAnexo);
+                        //result = FuncionesUDO.InsertRecord("ZANEXOS", oAnexo, "", DetallesVoid);
+                    }
+                }
+
+                //Distict a lista
+               var ListAnexos = lAnexos
+                                    .GroupBy(p => new { p.BaseRef,  p.BaseType, p.BaseEntry })
+                                    .Select(g => g.First())
+                                    .ToList();
+                //recorrer lista para insertar en matrix de anexos
+                if(ListAnexos.Count > 0)
+                {
+                    foreach (Anexos oAnexo in ListAnexos)
                     {
                         SAPbobsCOM.Recordset oRecordset = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
                         SAPbouiCOM.Matrix oMatrix = null;
                         SAPbouiCOM.EditText oEdit = null;
 
-                        string sBaseType = DT_SQL.GetValue("BaseType", i).ToString();
-                        string sBaseRef = DT_SQL.GetValue("BaseRef", i).ToString();
-                        string sBaseEntry = DT_SQL.GetValue("BaseEntry", i).ToString();
+                        string sBaseType = oAnexo.BaseType;
+                        string sBaseRef = oAnexo.BaseRef;
+                        string sBaseEntry = oAnexo.BaseEntry;
                         string sTable = "";
 
                         switch (sBaseType)
@@ -305,39 +353,144 @@ namespace FuncionalidadesAdicionales
 
                                     rowNum += 1;
 
-                                    //oAtt.Lines.SetCurrentLine(x);
-                                    //oAttN.Lines.Add();
-                                    //oAttN.Lines.FileName = System.IO.Path.GetFileNameWithoutExtension(RutaServ);
-                                    //oAttN.Lines.FileExtension = System.IO.Path.GetExtension(RutaServ).Substring(1);
-                                    //oAttN.Lines.SourcePath = System.IO.Path.GetDirectoryName(RutaServ);
-                                    //oAttN.Lines.Override = SAPbobsCOM.BoYesNoEnum.tYES;
-
-                                    //if (iAtcEntry > 0)
-                                    //{
-                                    //    if (oAttN.Update() != 0)
-                                    //        throw new Exception(oCompany.GetLastErrorDescription());  
-                                    //}
-                                    //else
-                                    //{
-                                    //    int iAttEntry = -1;
-
-                                    //    if (oAttN.Add() == 0)
-                                    //    {
-                                    //        iAttEntry = int.Parse(oCompany.GetNewObjectKey());
-                                    //        //Assign the attachment to the GR object (GR is my SAPbobsCOM.Documents object)  
-                                    //        oPurchaseOrders.AttachmentEntry = iAttEntry;
-                                    //    }  
-                                    //}
-
                                 }
 
                                 System.Runtime.InteropServices.Marshal.ReleaseComObject(oRecordset);
                             }
                         }
-
-
                     }
                 }
+
+                //string sql = "select  distinct BaseRef,BaseType,BaseEntry from POR1 where docentry = " + sDocEntry;
+                //DT_SQL.ExecuteQuery(sql);
+
+                //if (!DT_SQL.IsEmpty)
+                //{
+                //    for (int i = 0; i < DT_SQL.Rows.Count; i++)
+                //    {
+                //        SAPbobsCOM.Recordset oRecordset = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                //        SAPbouiCOM.Matrix oMatrix = null;
+                //        SAPbouiCOM.EditText oEdit = null;
+
+                //        string sBaseType = DT_SQL.GetValue("BaseType", i).ToString();
+                //        string sBaseRef = DT_SQL.GetValue("BaseRef", i).ToString();
+                //        string sBaseEntry = DT_SQL.GetValue("BaseEntry", i).ToString();
+                //        string sTable = "";
+
+                //        switch (sBaseType)
+                //        {
+                //            case "17": //Pedido
+                //                sTable = "ORDR";
+                //                break;
+                //            case "1470000113": //Solicitud de Compra
+                //                sTable = "OPRQ";
+                //                break;
+                //        }
+
+                //        if (sTable.Trim().Length > 0)
+                //        {
+                //            sql = "SELECT AtcEntry FROM " + sTable + " WHERE AtcEntry is not null AND DocNum = " + sBaseRef;
+                //            DT_SQL2.ExecuteQuery(sql);
+
+                //            if (!DT_SQL2.IsEmpty)
+                //            {
+                //                SAPbobsCOM.Attachments2 oAtt = (SAPbobsCOM.Attachments2)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oAttachments2);
+                //                oAtt.GetByKey(Convert.ToInt32(DT_SQL2.GetValue("AtcEntry", 0)));
+
+                //                //SAPbobsCOM.Attachments2 oAttN = (SAPbobsCOM.Attachments2)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oAttachments2);
+                //                //if (iAtcEntry > 0)
+                //                //{
+                //                //    oAttN.GetByKey(iAtcEntry);
+                //                //}
+
+                //                oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("1320002138").Specific;
+
+                //                int rowNum = oMatrix.RowCount + 1;
+
+                //                sql = @"select AttachPath from OADP";
+                //                oRecordset.DoQuery(sql);
+                //                string RutaDestino = oRecordset.Fields.Item(0).Value.ToString();
+
+                //                for (int x = 0; x < oAtt.Lines.Count; x++)
+                //                {
+
+                //                    sql = @"SELECT RTRIM(CAST(trgtPath  as nvarchar(200)))+'\'+FileName+'.'+FileExt from ATC1 where AbsEntry = " + DT_SQL2.GetValue("AtcEntry", 0) + " AND Line = " + (x + 1).ToString();
+                //                    oRecordset.DoQuery(sql);
+                //                    string RutaServ = oRecordset.Fields.Item(0).Value.ToString();
+
+                //                    oMatrix.AddRow();
+
+                //                    oEdit = (SAPbouiCOM.EditText)oMatrix.Columns.Item("1320000002").Cells.Item(rowNum).Specific;
+                //                    oEdit.Active = true;
+                //                    oEdit.Item.Enabled = true;
+                //                    oEdit.String = RutaDestino;
+
+                //                    oEdit = (SAPbouiCOM.EditText)oMatrix.Columns.Item("1320000003").Cells.Item(rowNum).Specific;
+                //                    oEdit.Active = true;
+                //                    oEdit.Item.Enabled = true;
+                //                    oEdit.String = System.IO.Path.GetDirectoryName(RutaServ);
+
+                //                    oEdit = (SAPbouiCOM.EditText)oMatrix.Columns.Item("1320000004").Cells.Item(rowNum).Specific;
+                //                    oEdit.Active = true;
+                //                    oEdit.Item.Enabled = true;
+                //                    oEdit.String = System.IO.Path.GetFileNameWithoutExtension(RutaServ);
+
+                //                    oEdit = (SAPbouiCOM.EditText)oMatrix.Columns.Item("1320000005").Cells.Item(rowNum).Specific;
+                //                    oEdit.Active = true;
+                //                    oEdit.Item.Enabled = true;
+                //                    oEdit.String = System.IO.Path.GetExtension(RutaServ).Substring(1);
+
+                //                    oEdit = (SAPbouiCOM.EditText)oMatrix.Columns.Item("1320000007").Cells.Item(rowNum).Specific;
+                //                    oEdit.Active = true;
+                //                    oEdit.Item.Enabled = true;
+                //                    oEdit.String = DateTime.Now.ToShortDateString();
+
+                //                    oEdit = (SAPbouiCOM.EditText)oMatrix.Columns.Item("1320000001").Cells.Item(rowNum).Specific;
+                //                    oEdit.Active = true;
+                //                    oEdit.Item.Enabled = true;
+                //                    oEdit.String = rowNum.ToString();
+
+                //                    //Se vuelve a cargar la primera fila para que no avance el scroll horizontal al final.
+                //                    oEdit = (SAPbouiCOM.EditText)oMatrix.Columns.Item("1320000002").Cells.Item(rowNum).Specific;
+                //                    oEdit.Active = true;
+                //                    oEdit.Item.Enabled = true;
+                //                    oEdit.String = RutaDestino;
+
+                //                    rowNum += 1;
+
+                //                    //oAtt.Lines.SetCurrentLine(x);
+                //                    //oAttN.Lines.Add();
+                //                    //oAttN.Lines.FileName = System.IO.Path.GetFileNameWithoutExtension(RutaServ);
+                //                    //oAttN.Lines.FileExtension = System.IO.Path.GetExtension(RutaServ).Substring(1);
+                //                    //oAttN.Lines.SourcePath = System.IO.Path.GetDirectoryName(RutaServ);
+                //                    //oAttN.Lines.Override = SAPbobsCOM.BoYesNoEnum.tYES;
+
+                //                    //if (iAtcEntry > 0)
+                //                    //{
+                //                    //    if (oAttN.Update() != 0)
+                //                    //        throw new Exception(oCompany.GetLastErrorDescription());  
+                //                    //}
+                //                    //else
+                //                    //{
+                //                    //    int iAttEntry = -1;
+
+                //                    //    if (oAttN.Add() == 0)
+                //                    //    {
+                //                    //        iAttEntry = int.Parse(oCompany.GetNewObjectKey());
+                //                    //        //Assign the attachment to the GR object (GR is my SAPbobsCOM.Documents object)  
+                //                    //        oPurchaseOrders.AttachmentEntry = iAttEntry;
+                //                    //    }  
+                //                    //}
+
+                //                }
+
+                //                System.Runtime.InteropServices.Marshal.ReleaseComObject(oRecordset);
+                //            }
+                //        }
+
+
+                //    }
+                //}
 
                 //System.Runtime.InteropServices.Marshal.ReleaseComObject(oPurchaseOrders);
                 //oPurchaseOrders = null;
@@ -369,7 +522,7 @@ namespace FuncionalidadesAdicionales
                             break;
                     }
 
-                    if (sBaseType.Trim() != "-1")
+                    if (sBaseType.Trim() != "-1" || oForm.Mode == SAPbouiCOM.BoFormMode.fm_ADD_MODE)
                         Button0.Item.Enabled = true;
                     else
                         Button0.Item.Enabled = false;

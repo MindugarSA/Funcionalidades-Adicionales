@@ -30,7 +30,7 @@ namespace FuncionalidadesAdicionales._1_Data_Layer
             return nProx;
         }
 
-        public string CreateUDT(string tableName, string tableDesc, SAPbobsCOM.BoUTBTableType tableType)
+        public static string CreateUDT(string tableName, string tableDesc, SAPbobsCOM.BoUTBTableType tableType)
         {
             SAPbobsCOM.Company SBO_Company = Conexion.oCompany;
 
@@ -72,7 +72,7 @@ namespace FuncionalidadesAdicionales._1_Data_Layer
             }
         }
 
-        public string CreateUDF(string tableName, string fieldName, string desc, SAPbobsCOM.BoFieldTypes fieldType, int Size, string LinkTab, SAPbobsCOM.BoFldSubTypes SubType = SAPbobsCOM.BoFldSubTypes.st_None)
+        public static string CreateUDF(string tableName, string fieldName, string desc, SAPbobsCOM.BoFieldTypes fieldType, int Size, string LinkTab, SAPbobsCOM.BoFldSubTypes SubType = SAPbobsCOM.BoFldSubTypes.st_None)
         {
             SAPbobsCOM.Company SBO_Company = Conexion.oCompany;
 
@@ -154,7 +154,7 @@ namespace FuncionalidadesAdicionales._1_Data_Layer
             return rpta;
         }
 
-        public bool CheckTableExists(string TableName)
+        public static bool CheckTableExists(string TableName)
         {
             SAPbobsCOM.Company SBO_Company = Conexion.oCompany;
 
@@ -184,7 +184,7 @@ namespace FuncionalidadesAdicionales._1_Data_Layer
             return ret;
         }
 
-        public bool CheckFieldExists(string TableName, string FieldName)
+        public static bool CheckFieldExists(string TableName, string FieldName)
         {
             SAPbobsCOM.Company SBO_Company = Conexion.oCompany;
 
@@ -216,7 +216,7 @@ namespace FuncionalidadesAdicionales._1_Data_Layer
             return ret;
         }
 
-        private int getFieldidByName(string TableName, string FieldName)
+        private static int getFieldidByName(string TableName, string FieldName)
         {
             SAPbobsCOM.Company SBO_Company = Conexion.oCompany;
             int index = -1;

@@ -247,7 +247,7 @@ namespace FuncionalidadesAdicionales._1_Data_Layer
             return rpta;
         }
 
-        public void CreateUDO(string tableName, SAPbobsCOM.BoUDOObjType objtype)
+        public static void CreateUDO(string tableName, SAPbobsCOM.BoUDOObjType objtype)
         {
             SAPbobsCOM.UserObjectsMD oUdtMD = null/* TODO Change to default(_) if this is not a reference type */; // ‘
             string errmsg = "";
@@ -267,17 +267,17 @@ namespace FuncionalidadesAdicionales._1_Data_Layer
                     oUdtMD.CanCancel = SAPbobsCOM.BoYesNoEnum.tNO;
                     oUdtMD.CanClose = SAPbobsCOM.BoYesNoEnum.tNO;
                     oUdtMD.CanDelete = SAPbobsCOM.BoYesNoEnum.tNO;
-                    oUdtMD.CanFind = SAPbobsCOM.BoYesNoEnum.tYES;
-                    oUdtMD.CanLog = SAPbobsCOM.BoYesNoEnum.tYES;
+                    oUdtMD.CanFind = SAPbobsCOM.BoYesNoEnum.tNO;
+                    oUdtMD.CanLog = SAPbobsCOM.BoYesNoEnum.tNO;
                     oUdtMD.ManageSeries = SAPbobsCOM.BoYesNoEnum.tNO;
                     oUdtMD.CanCreateDefaultForm = SAPbobsCOM.BoYesNoEnum.tNO;
-                    oUdtMD.CanYearTransfer = SAPbobsCOM.BoYesNoEnum.tYES;
+                    oUdtMD.CanYearTransfer = SAPbobsCOM.BoYesNoEnum.tNO;
                     oUdtMD.EnableEnhancedForm = SAPbobsCOM.BoYesNoEnum.tYES;
                     oUdtMD.MenuItem = SAPbobsCOM.BoYesNoEnum.tNO;
                     oUdtMD.UseUniqueFormType = SAPbobsCOM.BoYesNoEnum.tNO;
                     oUdtMD.Position = 1;
                     oUdtMD.FatherMenuID = 2048;
-                    oUdtMD.LogTableName = "AREBATEMASTER";
+                    //oUdtMD.LogTableName = "";
                     if (objtype == SAPbobsCOM.BoUDOObjType.boud_MasterData)
                     {
                         oUdtMD.FormColumns.FormColumnAlias = "Code";
@@ -313,7 +313,7 @@ namespace FuncionalidadesAdicionales._1_Data_Layer
             }
         }
 
-        public bool CheckUDOExists(string UDOName)
+        public static bool CheckUDOExists(string UDOName)
         {
             SAPbobsCOM.Company SBO_Company = Conexion.oCompany;
 
